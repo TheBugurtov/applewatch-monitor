@@ -1,0 +1,35 @@
+name: Fetch Latest Health JSON
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # каждый день в 01:00 UTC
+  workflow_dispatch:      # возможность запуска вручную
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Install Python packages
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install gdown
+
+    - name: Download latest Health JSON
+      run: |
+        python3 download_latest_json.py
+
+    - name: Analyze JSON and create latest.json
+      run: |
+        python3 analyze_json.py
+
+    - name: Commit and push latest.json
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add latest.json
+        git commit -m "Update latest.json" || echo "No changes to commit"
+        git push
