@@ -24,12 +24,22 @@ jobs:
     - name: Analyze JSON and create latest.json
       run: python3 analyze_json.py
 
-    - name: Commit and push latest.json
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: Update latest.json
-        branch: main
-        file_pattern: latest.json
-        commit_user_name: GitHub Actions
-        commit_user_email: actions@github.com
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Commit and push latest.json using PAT
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      run: |
+        set -eo pipefail
+
+        # Настройка git user
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+
+        # Убедимся, что у нас свежая копия и нужная ветка
+        git checkout -B main
+
+        # Добавляем и коммитим
+        git add latest.json
+        git commit -m "Update latest.json" || echo "No changes to commit"
+
+        # Push через PAT (без вывода токена)
+        git push https://$PAT_TOKEN@github.com/${{ github.repository }} HEAD:main
