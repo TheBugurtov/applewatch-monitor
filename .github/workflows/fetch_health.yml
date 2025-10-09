@@ -26,9 +26,7 @@ jobs:
     - name: Analyze JSON and create latest.json
       run: python3 analyze_json.py
 
-    - name: Commit and push latest.json using PAT
-      env:
-        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+    - name: Commit and push latest.json
       run: |
         set -eo pipefail
 
@@ -44,5 +42,5 @@ jobs:
         git add latest.json
         git commit -m "Update latest.json" || echo "No changes to commit"
 
-        # Пуш через PAT
-        git push https://$PAT_TOKEN@github.com/${{ github.repository }} HEAD:main
+        # Пуш напрямую (без PAT)
+        git push origin main
