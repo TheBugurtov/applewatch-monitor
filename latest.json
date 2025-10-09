@@ -1,6 +1,24 @@
 {
-  "heart_rate": 100,
-  "sleep": 50,
-  "active_energy": 0,
-  "advice": "Мало шагов, пройдись вечером | Встань с кресла на пару минут"
+  "timestamp": "2025-10-09T18:24:20.027311",
+  "overall_score": 50,
+  "risk_level": "moderate",
+  "medical_analysis": "Состояние требует внимания и наблюдения",
+  "top_recommendations": [
+    "Уровень кислорода на границе нормы - рекомендуется наблюдение",
+    "Повышенный пульс покоя - возможен стресс или недостаточное восстановление"
+  ],
+  "critical_metrics_summary": {
+    "hrv": {
+      "value": 52.38339424400149,
+      "status": "good"
+    },
+    "blood_oxygen": {
+      "value": 95,
+      "status": "borderline"
+    },
+    "resting_heart_rate": {
+      "value": 87,
+      "status": "elevated"
+    }
+  }
 }
