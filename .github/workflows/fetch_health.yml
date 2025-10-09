@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # важно для push
 
     - name: Install Python packages
       run: |
@@ -30,16 +32,17 @@ jobs:
       run: |
         set -eo pipefail
 
-        # Настройка git user
+        # Настройка git
         git config --local user.email "actions@github.com"
         git config --local user.name "GitHub Actions"
 
-        # Убедимся, что у нас свежая копия и нужная ветка
-        git checkout -B main
+        # Обновляем ветку
+        git fetch --all
+        git checkout -B main origin/main || git checkout -B main
 
         # Добавляем и коммитим
         git add latest.json
         git commit -m "Update latest.json" || echo "No changes to commit"
 
-        # Push через PAT (без вывода токена)
+        # Пуш через PAT
         git push https://$PAT_TOKEN@github.com/${{ github.repository }} HEAD:main
