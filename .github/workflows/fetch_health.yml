@@ -19,17 +19,17 @@ jobs:
         pip install gdown
 
     - name: Download latest Health JSON
-      run: |
-        python3 download_latest_json.py
+      run: python3 download_latest_json.py
 
     - name: Analyze JSON and create latest.json
-      run: |
-        python3 analyze_json.py
+      run: python3 analyze_json.py
 
     - name: Commit and push latest.json
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --local user.email "actions@github.com"
         git config --local user.name "GitHub Actions"
         git add latest.json
         git commit -m "Update latest.json" || echo "No changes to commit"
-        git push
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
